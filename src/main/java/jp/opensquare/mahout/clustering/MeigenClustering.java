@@ -46,9 +46,12 @@ public class MeigenClustering {
 		
 		ClusterDumper.main(new String[] {
 				"--input", new Path(outData, "clusters-*-final").toString(),
+				"--output", new Path("meigen-dump").toString(),
 				"--pointsDir",  new Path(outData, "clusterdPoints").toString(),
 				"--dictionary",  new Path(inData,"dictionary.file-0").toString(),
-				"--dictionaryType",  "sequencefile"
+				"--dictionaryType",  "sequencefile",
+				"--substring", "60",
+				"-dm", measure.getClass().getName()
 				});
 	}
 }

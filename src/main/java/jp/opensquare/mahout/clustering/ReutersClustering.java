@@ -35,20 +35,23 @@ public class ReutersClustering {
 		FileSystem fs = FileSystem.get(conf);
 
 		// delete data
-		HadoopUtil.delete(conf, canopy);
-		HadoopUtil.delete(conf, outData);
-
-		// Execute Clustering by Canopy method
-		CanopyDriver.run(conf, samples, canopy, measure, 0.7, 0.5, false, 0, false);
-
-		// Execute Clustering by K-Means method
-	    KMeansDriver.run(conf, vectorsFolder, canopyClusters, outData, measure, 0.01, 20, true, 0.0, false);
+//		HadoopUtil.delete(conf, canopy);
+//		HadoopUtil.delete(conf, outData);
+//
+//		// Execute Clustering by Canopy method
+//		CanopyDriver.run(conf, samples, canopy, measure, 0.7, 0.5, false, 0, false);
+//
+//		// Execute Clustering by K-Means method
+//	    KMeansDriver.run(conf, vectorsFolder, canopyClusters, outData, measure, 0.01, 20, true, 0.0, false);
 		
 		ClusterDumper.main(new String[] {
 				"--input", new Path(outData, "clusters-*-final").toString(),
+				"--output", new Path("reuters-dump").toString(),
 				"--pointsDir",  new Path(outData, "clusterdPoints").toString(),
 				"--dictionary",  new Path(inData,"dictionary.file-0").toString(),
-				"--dictionaryType",  "sequencefile"
+				"--dictionaryType",  "sequencefile",
+				"--substring", "60",
+				"-dm", measure.getClass().getName()
 				});
 	}
 }
