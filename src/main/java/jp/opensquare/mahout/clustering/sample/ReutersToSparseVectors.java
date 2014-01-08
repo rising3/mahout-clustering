@@ -8,7 +8,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
+import org.apache.lucene.analysis.WhitespaceAnalyzer;
 import org.apache.lucene.util.Version;
 import org.apache.mahout.common.HadoopUtil;
 import org.apache.mahout.common.Pair;
@@ -31,6 +31,7 @@ public class ReutersToSparseVectors {
     int reduceTasks = 1;
     int chunkSize = 200;
     int norm = 2;
+    
     boolean sequentialAccessOutput = true;
     
     String inputDir = "reuters-seqfiles";
@@ -43,13 +44,17 @@ public class ReutersToSparseVectors {
 
     Path tokenizedPath = new Path(outputDir, DocumentProcessor.TOKENIZED_DOCUMENT_OUTPUT_FOLDER);
 
-    //Analyzer analyzer = new MyAnalyzer();
-    Analyzer analyzer = new WhitespaceAnalyzer(Version.LUCENE_43);    
+    Analyzer analyzer = new WhitespaceAnalyzer(Version.LUCENE_30);
     DocumentProcessor.tokenizeDocuments(new Path(inputDir), analyzer.getClass().asSubclass(Analyzer.class), tokenizedPath, conf);
-    
+
+//    DictionaryVectorizer.createTermFrequencyVectors(tokenizedPath,
+//    	      new Path(outputDir), DictionaryVectorizer.DOCUMENT_VECTOR_OUTPUT_FOLDER, 
+//    	      conf, minSupport, maxNGramSize, minLLRValue, 2, true, reduceTasks,
+//    	      chunkSize, sequentialAccessOutput, false);
+
     DictionaryVectorizer.createTermFrequencyVectors(tokenizedPath,
       new Path(outputDir), DictionaryVectorizer.DOCUMENT_VECTOR_OUTPUT_FOLDER, 
-      conf, minSupport, maxNGramSize, minLLRValue, 2, true, reduceTasks,
+      conf, minSupport, maxNGramSize, minLLRValue, -1, true, reduceTasks,
       chunkSize, sequentialAccessOutput, false);
 
     Pair<Long[], List<Path>> dfData = TFIDFConverter.calculateDF(
@@ -60,9 +65,7 @@ public class ReutersToSparseVectors {
       new Path(outputDir , DictionaryVectorizer.DOCUMENT_VECTOR_OUTPUT_FOLDER),
       new Path(outputDir), conf, dfData, minDf, maxDFPercent, 
       norm, true, sequentialAccessOutput, false, reduceTasks);
-    
-
-    
+        
     String vectorsFolder = outputDir + "/tfidf-vectors";
     SequenceFile.Reader reader = new SequenceFile.Reader(fs, new Path(vectorsFolder, "part-r-00000"), conf); 
     Text key = new Text();
@@ -72,8 +75,8 @@ public class ReutersToSparseVectors {
                          + value.get().asFormatString());
     }
     reader.close();
-	VectorDumper.main(new String[] { "--input", new Path(vectorsFolder, "part-r-00000").toString() });
-	SequenceFileDumper.main(new String[] { "--input", new Path(vectorsFolder, "part-r-00000").toString() });
+//	VectorDumper.main(new String[] { "--input", new Path(vectorsFolder, "part-r-00000").toString() });
+//	SequenceFileDumper.main(new String[] { "--input", new Path(vectorsFolder, "part-r-00000").toString() });
 
   }
 }
