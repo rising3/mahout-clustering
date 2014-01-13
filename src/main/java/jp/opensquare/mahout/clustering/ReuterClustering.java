@@ -2,7 +2,6 @@ package jp.opensquare.mahout.clustering;
 
 import java.util.List;
 
-import jp.opensquare.mahout.clustering.model.PointCluster;
 import jp.opensquare.mahout.clustering.model.WordCluster;
 import jp.opensquare.mahout.clustering.util.ClusterModelUtil;
 
@@ -17,20 +16,20 @@ import org.apache.mahout.common.distance.CosineDistanceMeasure;
 import org.apache.mahout.common.distance.DistanceMeasure;
 import org.apache.mahout.utils.clustering.ClusterDumper;
 
-public class MeigenClustering {
+public class ReuterClustering {
 
 	public static void main(String args[]) throws Exception {
 		// input data
-		Path inData = new Path("meigen-vectors");
+		Path inData = new Path("reuters-vectors");
 		Path vectorsFolder = new Path(inData, "tfidf-vectors");
 		Path samples = new Path(vectorsFolder, "part-r-00000");
 
 		// canopy
-		Path canopy = new Path("meigen-canopy");
+		Path canopy = new Path("reuters-canopy");
 		Path canopyClusters = new Path(canopy, "clusters-0-final");
 
 		// output data
-		Path outData = new Path("meigen-output");
+		Path outData = new Path("reuters-output");
 		Path outClustered = new Path(outData, Kluster.CLUSTERED_POINTS_DIR);
 		Path outClusteredFile = new Path(outClustered, "part-m-00000");
 
@@ -52,7 +51,7 @@ public class MeigenClustering {
 		
 		ClusterDumper.main(new String[] {
 				"--input", new Path(outData, "clusters-*-final").toString(),
-				"--output", new Path("meigen-dump").toString(),
+				"--output", new Path("reuters-dump").toString(),
 				"--pointsDir",  new Path(outData, "clusterdPoints").toString(),
 				"--dictionary",  new Path(inData,"dictionary.file-0").toString(),
 				"--dictionaryType",  "sequencefile",
@@ -68,6 +67,7 @@ public class MeigenClustering {
 				samples,
 				new Path(inData, "dictionary.file-0"),
 				measure);
-		ClusterModelUtil.writeJson(fs, conf, new Path("meigen-clusters.json"),list);
+		ClusterModelUtil.writeJson(fs, conf, new Path("reuters-clusters.json"),list);
+		
 	}
 }

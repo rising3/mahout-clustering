@@ -7,8 +7,6 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.WhitespaceAnalyzer;
 import org.apache.mahout.common.HadoopUtil;
 import org.apache.mahout.common.Pair;
 import org.apache.mahout.math.VectorWritable;
@@ -18,39 +16,45 @@ import org.apache.mahout.vectorizer.DictionaryVectorizer;
 import org.apache.mahout.vectorizer.DocumentProcessor;
 import org.apache.mahout.vectorizer.tfidf.TFIDFConverter;
 
-public class MeigenToSparseVectors {
+public class ReutersToOptVectors {
 
 	public static void main(String args[]) throws Exception {
 
+		// 単語の最小出現回数
 		int minSupport = 5;
-		int minDf = 5;
-		int maxDFPercent = 95;
-		int maxNGramSize = 1;
-		float minLLRValue = 50;
+		// 最小ドキュメント頻度
+		int minDf = 3;
+		// ドキュメント頻度の最大パーセンテージ
+		int maxDFPercent = 90;
+		// Nグラムの大きさ
+		int maxNGramSize = 2;
+		// 対数尤度比の最小値
+		float minLLRValue = 50F;
+		// Reducerの数
 		int reduceTasks = 1;
+		// チャンクサイズ
 		int chunkSize = 200;
-		int norm = 2;
+		int norm = -1;
+
 		boolean sequentialAccessOutput = true;
 
-		String inputDir = "meigen-seqfiles";
-		String outputDir = "meigen-vectors";
+		String inputDir = "reuters-seqfiles";
+		String outputDir = "reuters-opt-vectors";
 
 		Configuration conf = new Configuration();
 		FileSystem fs = FileSystem.get(conf);
 
 		HadoopUtil.delete(conf, new Path(outputDir));
 
-		Path tokenizedPath = new Path(outputDir,
-				DocumentProcessor.TOKENIZED_DOCUMENT_OUTPUT_FOLDER);
+		Path tokenizedPath = new Path(outputDir, DocumentProcessor.TOKENIZED_DOCUMENT_OUTPUT_FOLDER);
 
-		// Analyzer analyzer = new MyAnalyzer();
-		DocumentProcessor.tokenizeDocuments(
-				new Path(inputDir), WhitespaceAnalyzer.class.asSubclass(Analyzer.class), tokenizedPath, conf);
+		// use custom analyzer
+		DocumentProcessor.tokenizeDocuments(new Path(inputDir), ReutersAnalyzer.class, tokenizedPath, conf);
 
 		DictionaryVectorizer.createTermFrequencyVectors(tokenizedPath,
 				new Path(outputDir),
 				DictionaryVectorizer.DOCUMENT_VECTOR_OUTPUT_FOLDER, conf,
-				minSupport, maxNGramSize, minLLRValue, 2, true, reduceTasks,
+				minSupport, maxNGramSize, minLLRValue, norm, true, reduceTasks,
 				chunkSize, sequentialAccessOutput, false);
 
 		Pair<Long[], List<Path>> dfData = TFIDFConverter.calculateDF(
@@ -64,8 +68,8 @@ public class MeigenToSparseVectors {
 
 		String vectorsFolder = outputDir + "/tfidf-vectors";
 		SequenceFile.Reader reader = new SequenceFile.Reader(
-				fs, new Path(vectorsFolder, "part-r-00000"), conf);
-
+				fs,
+				new Path(vectorsFolder, "part-r-00000"), conf);
 		Text key = new Text();
 		VectorWritable value = new VectorWritable();
 		while (reader.next(key, value)) {
@@ -73,7 +77,7 @@ public class MeigenToSparseVectors {
 					+ value.get().asFormatString());
 		}
 		reader.close();
-		VectorDumper.main(new String[] { "--input", new Path(vectorsFolder, "part-r-00000").toString() });
-		SequenceFileDumper.main(new String[] { "--input", new Path(vectorsFolder, "part-r-00000").toString() });
+//		VectorDumper.main(new String[] { "--input", new Path(vectorsFolder, "part-r-00000").toString() });
+//		SequenceFileDumper.main(new String[] { "--input", new Path(vectorsFolder, "part-r-00000").toString() });
 	}
 }

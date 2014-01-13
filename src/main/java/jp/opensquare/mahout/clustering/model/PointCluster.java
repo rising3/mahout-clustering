@@ -3,8 +3,9 @@ package jp.opensquare.mahout.clustering.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cluster {
+public class PointCluster {
 	Integer cluster;
+	Long n;
 	Double cx;
 	Double cy;
 	Double rx;
@@ -16,6 +17,12 @@ public class Cluster {
 	}
 	public void setCluster(Integer cluster) {
 		this.cluster = cluster;
+	}
+	public Long getN() {
+		return n;
+	}
+	public void setN(Long n) {
+		this.n = n;
 	}
 	public Double getCx() {
 		return cx;
@@ -45,9 +52,10 @@ public class Cluster {
 		return points;
 	}
 
-	public Cluster(Integer cluster, Double cx, Double cy, Double rx, Double ry) {
+	public PointCluster(Integer cluster, Long n, Double cx, Double cy, Double rx, Double ry) {
 		super();
 		this.cluster = cluster;
+		this.n = n;
 		this.cx = cx;
 		this.cy = cy;
 		this.rx = rx;

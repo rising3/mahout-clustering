@@ -3,7 +3,7 @@ package jp.opensquare.mahout.clustering;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.opensquare.mahout.clustering.model.Cluster;
+import jp.opensquare.mahout.clustering.model.PointCluster;
 import jp.opensquare.mahout.clustering.util.ClusterModelUtil;
 import jp.opensquare.mahout.clustering.util.ClusteringUtil;
 
@@ -17,6 +17,7 @@ import org.apache.mahout.common.distance.DistanceMeasure;
 import org.apache.mahout.common.distance.EuclideanDistanceMeasure;
 import org.apache.mahout.math.RandomAccessSparseVector;
 import org.apache.mahout.math.Vector;
+import org.apache.mahout.utils.clustering.ClusterDumper;
 
 public class HelloKlustering {
 	
@@ -35,14 +36,14 @@ public class HelloKlustering {
 			{ 9, 9 } };
 		
 		// input data
-		Path inData = new Path("input");
+		Path inData = new Path("hello-input");
 		Path inPoints = new Path(inData, "points");
 		Path inPointFile = new Path(inPoints, "file1");	
 		Path inClusters = new Path(inData, "clusters");
 		Path inClusterFile = new Path(inClusters, "part-m-00000");
 
 		// output data
-		Path outData = new Path("output");
+		Path outData = new Path("hello-output");
 		Path outClustered = new Path(outData, Kluster.CLUSTERED_POINTS_DIR);
 		Path outClusteredFile = new Path(outClustered, "part-m-00000");
 
@@ -69,11 +70,18 @@ public class HelloKlustering {
 		// Execute Clustering by K-Means method
 		KMeansDriver.run(conf, inPoints, inClusters, outData, measure, 0.001, 10, true, 0.0, false);
 
+		ClusterDumper.main(new String[] {
+				"--input", new Path(outData, "clusters-*-final").toString(),
+				"--output", new Path("hello-dump").toString(),
+				"--pointsDir",  new Path(outData, "clusterdPoints").toString(),
+				"--substring", "60",
+				"-dm", measure.getClass().getName()
+				});
+
 		// result to JSON
-		List<Cluster> list = ClusterModelUtil.readClusters(fs, conf, outData);
-		ClusterModelUtil.writeJson(new Path("clusters.json"),list);
-		System.out.println(ClusterModelUtil.toJson(list));
-//		ClusterDumper.main(new String[] { "--input", new Path("output/clusters-*-final").toString(), "--pointsDir",  new Path("output/clusterdPoints").toString() });
+		List<PointCluster> list = ClusterModelUtil.readClusters(fs, conf, outData);
+		ClusterModelUtil.writeJson(fs, conf, new Path("hello-clusters.json"),list);
+		System.out.println(ClusterModelUtil.toJson(list));		
 	}
 
 	static List<Vector> getPoints(double[][] raw) {
