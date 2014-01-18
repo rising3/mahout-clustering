@@ -23,7 +23,7 @@ public class ReutersToOptVectors {
 		// 単語の最小出現回数
 		int minSupport = 5;
 		// 最小ドキュメント頻度
-		int minDf = 3;
+		int minDf = 5;
 		// ドキュメント頻度の最大パーセンテージ
 		int maxDFPercent = 90;
 		// Nグラムの大きさ

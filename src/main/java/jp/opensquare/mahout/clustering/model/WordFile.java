@@ -1,6 +1,6 @@
 package jp.opensquare.mahout.clustering.model;
 
-public class BindFile {
+public class WordFile {
 	String title;
 	Double distance;
 	
@@ -17,7 +17,7 @@ public class BindFile {
 		this.distance = distance;
 	}
 	
-	public BindFile(String title, Double distance) {
+	public WordFile(String title, Double distance) {
 		super();
 		this.title = title;
 		this.distance = distance;

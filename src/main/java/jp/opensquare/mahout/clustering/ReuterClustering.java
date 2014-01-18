@@ -44,10 +44,10 @@ public class ReuterClustering {
 		HadoopUtil.delete(conf, outData);
 
 		// Execute Clustering by Canopy method
-		CanopyDriver.run(conf, samples, canopy, measure, 0.7, 0.5, false, 0, false);
+		CanopyDriver.run(conf, samples, canopy, measure, 0.6, 0.4, false, 0, false);
 
 		// Execute Clustering by K-Means method
-	    KMeansDriver.run(conf, vectorsFolder, canopyClusters, outData, measure, 0.01, 20, true, 0.0, false);
+	    KMeansDriver.run(conf, vectorsFolder, canopyClusters, outData, measure, 0.1, 20, true, 0.0, false);
 		
 		ClusterDumper.main(new String[] {
 				"--input", new Path(outData, "clusters-*-final").toString(),

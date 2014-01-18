@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import jp.opensquare.mahout.clustering.model.BindFile;
+import jp.opensquare.mahout.clustering.model.WordFile;
 import jp.opensquare.mahout.clustering.model.Point;
 import jp.opensquare.mahout.clustering.model.PointCluster;
 import jp.opensquare.mahout.clustering.model.WordCluster;
@@ -196,7 +196,7 @@ public class ClusterModelUtil {
 				}
 			}
 			WordCluster cluster = clusters.get(c);
-			cluster.getFiles().add(new BindFile(title, min));
+			cluster.getFiles().add(new WordFile(title, min));
 		}
 	}	
 	

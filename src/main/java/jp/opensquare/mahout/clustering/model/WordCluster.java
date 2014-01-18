@@ -13,7 +13,7 @@ public class WordCluster {
 
 	Map <Double, Word> topTerms = new HashMap <Double, Word>();
 	List<Word> texts = new ArrayList<Word>();
-	List<BindFile> files = new ArrayList<BindFile>();
+	List<WordFile> files = new ArrayList<WordFile>();
 
 	public Integer getCluster() {
 		return cluster;
@@ -32,7 +32,7 @@ public class WordCluster {
 		return getTopTerms(10);
 	}
 
-	public List<BindFile> getFiles() {
+	public List<WordFile> getFiles() {
 		return this.files;
 	}
 	
