@@ -217,7 +217,7 @@ public class ClusterModelUtil {
 	static ObjectMapper getObjectMapper() {
 		if(om == null) {
 			om = new ObjectMapper();
-			om.enable(SerializationConfig.Feature.INDENT_OUTPUT);
+			//om.enable(SerializationConfig.Feature.INDENT_OUTPUT);
 		}
 		return om;
 	}

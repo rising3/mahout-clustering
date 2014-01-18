@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
@@ -36,6 +37,7 @@ public class ClusteringUtil {
 	}
 
 	public static void writePointsToFile(FileSystem fs, Configuration conf, List<Vector> points, Path path) throws IOException {
+
 		SequenceFile.Writer writer = new SequenceFile.Writer(fs, conf, path, LongWritable.class, VectorWritable.class);
 		long recNum = 0;
 		VectorWritable vec = new VectorWritable();
@@ -50,6 +52,7 @@ public class ClusteringUtil {
 	}
 
 	public static void writeClustersToFile(FileSystem fs, Configuration conf, int k, List<Vector> points, Path path) throws IOException {
+
 		SequenceFile.Writer writer = new SequenceFile.Writer(fs, conf, path, Text.class, Kluster.class);
 		for (int i = 0; i < k; i++) {
 			Vector vec = points.get(i);
