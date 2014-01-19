@@ -19,7 +19,7 @@ import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.util.Version;
 
-public class ReutersAnalyzer extends Analyzer {
+public class ReuterAnalyzer extends Analyzer {
 	private final Pattern alphabets = Pattern.compile("[a-z]+");
 
 	@Override

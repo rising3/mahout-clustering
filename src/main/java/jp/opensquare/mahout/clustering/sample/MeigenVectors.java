@@ -17,7 +17,7 @@ import org.apache.mahout.vectorizer.DictionaryVectorizer;
 import org.apache.mahout.vectorizer.DocumentProcessor;
 import org.apache.mahout.vectorizer.tfidf.TFIDFConverter;
 
-public class ReutersToVectors {
+public class MeigenVectors {
 
 	public static void main(String args[]) throws Exception {
 
@@ -26,11 +26,11 @@ public class ReutersToVectors {
 		// 最小ドキュメント頻度
 		int minDf = 3;
 		// ドキュメント頻度の最大パーセンテージ
-		int maxDFPercent = 95;
+		int maxDFPercent = 90;
 		// Nグラムの大きさ
-		int maxNGramSize = 1;
+		int maxNGramSize = 2;
 		// 対数尤度比の最小値
-		float minLLRValue = 1F;
+		float minLLRValue = 50F;
 		// Reducerの数
 		int reduceTasks = 1;
 		// チャンクサイズ
@@ -39,8 +39,8 @@ public class ReutersToVectors {
 
 		boolean sequentialAccessOutput = true;
 
-		String inputDir = "reuters-seqfiles";
-		String outputDir = "reuters-vectors";
+		String inputDir = "meigen-seqfiles";
+		String outputDir = "meigen-vectors";
 
 		Configuration conf = new Configuration();
 		FileSystem fs = FileSystem.get(conf);
@@ -68,8 +68,8 @@ public class ReutersToVectors {
 
 		String vectorsFolder = outputDir + "/tfidf-vectors";
 		SequenceFile.Reader reader = new SequenceFile.Reader(
-				fs,
-				new Path(vectorsFolder, "part-r-00000"), conf);
+				fs, new Path(vectorsFolder, "part-r-00000"), conf);
+
 		Text key = new Text();
 		VectorWritable value = new VectorWritable();
 		while (reader.next(key, value)) {

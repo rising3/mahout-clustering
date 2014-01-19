@@ -16,7 +16,7 @@ import org.apache.mahout.vectorizer.DictionaryVectorizer;
 import org.apache.mahout.vectorizer.DocumentProcessor;
 import org.apache.mahout.vectorizer.tfidf.TFIDFConverter;
 
-public class ReutersToOptVectors {
+public class ReuterOptVectors {
 
 	public static void main(String args[]) throws Exception {
 
@@ -49,7 +49,7 @@ public class ReutersToOptVectors {
 		Path tokenizedPath = new Path(outputDir, DocumentProcessor.TOKENIZED_DOCUMENT_OUTPUT_FOLDER);
 
 		// use custom analyzer
-		DocumentProcessor.tokenizeDocuments(new Path(inputDir), ReutersAnalyzer.class, tokenizedPath, conf);
+		DocumentProcessor.tokenizeDocuments(new Path(inputDir), ReuterAnalyzer.class, tokenizedPath, conf);
 
 		DictionaryVectorizer.createTermFrequencyVectors(tokenizedPath,
 				new Path(outputDir),

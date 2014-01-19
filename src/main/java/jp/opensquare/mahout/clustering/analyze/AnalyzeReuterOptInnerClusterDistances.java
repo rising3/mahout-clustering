@@ -8,7 +8,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.mahout.common.distance.CosineDistanceMeasure;
 import org.apache.mahout.common.distance.DistanceMeasure;
 
-public class AnalyzeOptReuterInnerClusterDistances {
+public class AnalyzeReuterOptInnerClusterDistances {
 	public static void main(String[] args) throws Exception {
 		DistanceMeasure measure = new CosineDistanceMeasure();
 		Configuration conf = new Configuration();

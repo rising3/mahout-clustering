@@ -2,7 +2,6 @@
 
 rm -rf meigen-wakati
 rm -rf meigen-seqfiles
-rm -rf meigen-vectors
 
 mkdir -p meigen-wakati
 
